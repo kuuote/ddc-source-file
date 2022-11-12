@@ -171,7 +171,7 @@ export class Source extends BaseSource<Params> {
       });
     }
 
-    const cwd = await fn.getcwd(args.denops) as string;
+    const cwd = await args.denops.call("ddc_file#internal#get_cwd") as string;
 
     // point from cwd
     findPointsAsync.push({

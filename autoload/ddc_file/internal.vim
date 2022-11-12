@@ -36,6 +36,25 @@ function! ddc_file#internal#get_pos(input_line, chars) abort
   return match(a:input_line, printf('[%s]*$', a:chars))
 endfunction
 
+function! ddc_file#internal#get_cwd() abort
+  let pid = -1
+  if has_key(t:, 'deol')
+    echomsg 'deol'
+    let pid = t:deol.pid
+  elseif has_key(b:, 'terminal_job_pid')
+    echomsg 'nvim'
+    let jid = b:terminal_job_pid
+  else
+    echomsg 'fall'
+    return getcwd()
+  endif
+  let cwd = printf('/proc/%d/cwd', pid)
+  if isdirectory(cwd)
+    return resolve(cwd)
+  endif
+  return getcwd()
+endfunction
+
 function! ddc_file#internal#_test() abort
   let isk_s = &isk
   let isf_s = &isf
